@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import Page
-
+from time import sleep
 class LoginPage(Page):
     URL = "https://soft.reelly.io"
 
@@ -11,6 +11,8 @@ class LoginPage(Page):
     def open(self):
         self.driver.get(self.URL)
 
+        sleep (3)
+
     def login(self, email, password):
         self.wait_for_element(*self.EMAIL_INPUT)
         self.input_text(email, *self.EMAIL_INPUT)
@@ -20,3 +22,5 @@ class LoginPage(Page):
 
         self.wait_for_element_click(*self.CONTINUE_BTN)
         self.click_element(*self.CONTINUE_BTN)
+
+
