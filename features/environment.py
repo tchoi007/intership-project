@@ -6,21 +6,54 @@ import time
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.edge.options import Options as EdgeOptions
+
 
 
 def browser_init(context):
     """
     :param context: Behave context
     """
-    options = Options()
-    options.add_argument("--headless")
-    driver_path = GeckoDriverManager().install()
+
+
+    username = 'tomas_1aqxVc'
+    access_key = 'THbkesv3A4a47JA2HpxE'
+    browserstack_url = f"https://{username}:{access_key}@hub-cloud.browserstack.com/wd/hub"
+
+    options = EdgeOptions()
+
+    # Set browser name and version at top level
+    options.set_capability("browserName", "Edge")
+    options.set_capability("browserVersion", "latest")
+
+    # BrowserStack options inside 'bstack:options'
+    options.set_capability("bstack:options", {
+        "os": "Windows",
+        "osVersion": "11",
+        "sessionName": context.scenario.name if hasattr(context, 'scenario') else 'BDD Edge Test',
+        "debug": True,
+        "networkLogs": True,
+        "consoleLogs": "info"
+    })
+
+    context.driver = webdriver.Remote(
+        command_executor=browserstack_url,
+        options=options
+    )
+
+    #options = Options()
+    #options.add_argument("--headless")
+    #driver_path = GeckoDriverManager().install()
     #driver_path = ChromeDriverManager().install()
-    service = Service(driver_path)
-    context.driver = webdriver.Firefox(service=service, options=options)
+    #service = Service(driver_path)
+    #context.driver = webdriver.Firefox(service=service, options=options)
     #context.driver = webdriver.Chrome(service=service, options=options)
 
     #context.driver.maximize_window()
+
+    print(f"BrowserStack session started with ID: {context.driver.session_id}")
+
+
     context.driver.set_window_size(1920, 1080)
     context.driver.implicitly_wait(4)
 
