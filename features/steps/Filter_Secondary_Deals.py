@@ -14,6 +14,11 @@ def step_login(context):
     context.main_page = MainPage(context.driver)
     # context.main_page.verify_page_loaded()
 
+@when('Click on off plan')
+def step_click_off_plan(context):
+    context.main_page.click_off_plan()
+
+
 @when('Click on the Secondary option')
 def step_click_secondary(context):
     context.main_page.click_secondary_option()

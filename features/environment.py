@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import allure
@@ -11,11 +12,25 @@ def browser_init(context):
     """
     :param context: Behave context
     """
+    mobile_emulation = {"deviceName": "Nexus 5"}
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
+
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+
     driver_path = ChromeDriverManager().install()
     service = Service(driver_path)
-    context.driver = webdriver.Chrome(service=service)
-    context.driver.maximize_window()
+    context.driver = webdriver.Chrome(service=service, options=chrome_options)
+
     context.driver.implicitly_wait(4)
+
+    # driver_path = ChromeDriverManager().install()
+    # service = Service(driver_path)
+    # context.driver = webdriver.Chrome(service=service)
+    # #context.driver.maximize_window()
+    # context.driver.set_window_size(430, 932)
+    # context.driver.implicitly_wait(4)
 
 
 def before_scenario(context, scenario):

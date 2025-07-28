@@ -23,4 +23,4 @@ class LoginPage(Page):
         self.wait_for_element_click(*self.CONTINUE_BTN)
         self.click_element(*self.CONTINUE_BTN)
 
-
+        sleep (3)
